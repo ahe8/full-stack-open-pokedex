@@ -12,7 +12,9 @@ jobs:
       - name: Say hello
         run: |
           echo "Hello World!"
-      - name: List date and current directory
+      - name: List date
         run: |
-          echo date
-          echo ls
+          date
+      - name: List current directory
+        run: |
+          ls
