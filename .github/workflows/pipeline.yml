@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  TAG_CONDITION: ${{ contains(fromJson('#skip'), toJson(github.event.commits.*.message)[0]) }}
+  TAG_CONDITION: ${{ contains('#skip', toJson(github.event.commits.*.message)[0]) }}
 
 jobs:
   simple_deployment_pipeline:
