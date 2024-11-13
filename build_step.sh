@@ -2,4 +2,4 @@
 
 echo "Build script"
 
-npm webpack --mode production
+webpack --mode production
