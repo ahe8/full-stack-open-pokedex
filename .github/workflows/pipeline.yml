@@ -29,6 +29,7 @@ jobs:
     needs: simple_deployment_pipeline
     uses: ./.github/workflows/playwright-test.yml
   deploy:
+    if: ${{ github.event_name == 'push' }}
     needs: test
     uses: ./.github/workflows/render-deploy.yml
     secrets: 
