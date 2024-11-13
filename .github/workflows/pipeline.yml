@@ -27,4 +27,7 @@ jobs:
 #    uses: ./.github/workflows/playwright-test.yml
   deploy:
 #    needs: test
+    
     uses: ./.github/workflows/render-deploy.yml
+    secrets: 
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
