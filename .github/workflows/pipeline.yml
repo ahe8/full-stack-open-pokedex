@@ -9,8 +9,8 @@ on:
     types: [opened, synchronize]
   workflow_dispatch:
 
-# env:
-#   TAG_CONDITION: ${{ }}
+env:
+  TAG_CONDITION: ${{ contains(fromJson('#skip'), toJson(github.event.commits.*.message)[0]) }}
 
 jobs:
   simple_deployment_pipeline:
@@ -40,6 +40,9 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: tag condition
+        run:
+          echo "$TAG_CONDITION"
 
   # test:
   #   needs: simple_deployment_pipeline
@@ -48,7 +51,7 @@ jobs:
   #   if: ${{ github.event_name == 'push' }}
   #   needs: test
   #   uses: ./.github/workflows/render-deploy.yml
-  #   secrets: 
+  #   secrets:
   #     RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
   # tag_release:
   #   if: ${{ env.TAG_CONDITION == 'true' }}
