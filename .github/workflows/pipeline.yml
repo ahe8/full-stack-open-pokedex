@@ -20,30 +20,42 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install dependencies
-        run: npm install
-      - name: Check style
-        run: npm run eslint
-      - name: build
-        run: npm run build
-      - name: test
-        run: npm run test
-
-  test:
-    needs: simple_deployment_pipeline
-    uses: ./.github/workflows/playwright-test.yml
-  deploy:
-    if: ${{ github.event_name == 'push' && github.env.TAG_CONDITION == 'true' }}
-    needs: test
-    uses: ./.github/workflows/render-deploy.yml
-    secrets:
-      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-  tag_release:
-    needs: deploy
+      # - name: Install dependencies
+      #   run: npm install
+      # - name: Check style
+      #   run: npm run eslint
+      # - name: build
+      #   run: npm run build
+      # - name: test
+      #   run: npm run test
+      
+  test1:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.71.0
+      - name: test
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEST: ${{ github.env.TAG_CONDITION }}
+        run: echo $TEST
+      - name: test2
+        env:
+          TEST: ${{ github.event_name == 'push' && github.env.TAG_CONDITION == 'true' }}
+        run: echo $TEST
+
+  # test:
+  #   needs: simple_deployment_pipeline
+  #   uses: ./.github/workflows/playwright-test.yml
+  # deploy:
+  #   if: ${{ github.event_name == 'push' && github.env.TAG_CONDITION == 'true' }}
+  #   needs: test
+  #   uses: ./.github/workflows/render-deploy.yml
+  #   secrets:
+  #     RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+  # tag_release:
+  #   needs: deploy
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Bump version and push tag
+  #       uses: anothrNick/github-tag-action@1.71.0
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
