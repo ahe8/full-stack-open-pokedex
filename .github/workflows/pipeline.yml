@@ -31,8 +31,8 @@ jobs:
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
-          echo ${{secrets.RENDER_SERVICE_ID}} | sed 's/./& /g'
-          echo ${{secrets.secrets.RENDER_API_KEY}} | sed 's/./& /g'
+          echo ${{secrets.RENDER_SERVICE_ID}}
+          echo ${{secrets.RENDER_API_KEY}}
   deploy:
 #    needs: test
     uses: ./.github/workflows/render-deploy.yml
