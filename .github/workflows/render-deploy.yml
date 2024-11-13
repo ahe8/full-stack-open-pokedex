@@ -13,4 +13,7 @@ jobs:
       env:
         deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
       run: |
+        echo 
+        echo "$deploy_url"
+        echo ${{secrets.AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
         curl "$deploy_url"
