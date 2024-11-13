@@ -22,17 +22,9 @@ jobs:
         run: npm run build
       - name: test
         run: npm run test
-#  test:
-#    needs: simple_deployment_pipeline
-#    uses: ./.github/workflows/playwright-test.yml
-
-      - name: Set up secret file
-        env:
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: |
-          echo ${{secrets.RENDER_SERVICE_ID}} | sed 's/./& /g'
-          echo ${{secrets.RENDER_API_KEY}} | sed 's/./& /g'
+  test:
+    needs: simple_deployment_pipeline
+    uses: ./.github/workflows/playwright-test.yml
   deploy:
-#    needs: test
+    needs: test
     uses: ./.github/workflows/render-deploy.yml
