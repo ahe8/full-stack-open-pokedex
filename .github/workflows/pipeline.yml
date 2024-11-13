@@ -22,12 +22,11 @@ jobs:
         run: npm run build
       - name: test
         run: npm run test
-#  test:
-#    needs: simple_deployment_pipeline
-#    uses: ./.github/workflows/playwright-test.yml
+  test:
+    needs: simple_deployment_pipeline
+    uses: ./.github/workflows/playwright-test.yml
   deploy:
-#    needs: test
-    
+    needs: test
     uses: ./.github/workflows/render-deploy.yml
     secrets: 
       RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

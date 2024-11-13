@@ -18,7 +18,4 @@ jobs:
       env:
         RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
       run: |
-        echo 
-        echo "$RENDER_DEPLOY_HOOK_URL"
-        echo ${{secrets.RENDER_DEPLOY_HOOK_URL}} | sed 's/./& /g'
         curl "$RENDER_DEPLOY_HOOK_URL"
