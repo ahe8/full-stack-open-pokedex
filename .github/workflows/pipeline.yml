@@ -9,8 +9,7 @@ on:
     types: [opened, synchronize]
   workflow_dispatch:
 
-env:
-  TAG_CONDITION: ${{ !contains('#skip', toJson(github.event.commits.*.message)[0]) }}
+
 
 jobs:
   simple_deployment_pipeline:
@@ -34,12 +33,8 @@ jobs:
     steps:
       - name: test
         env:
-          TEST: ${{ github.env.TAG_CONDITION }}
-        run: echo $TEST
-      - name: test2
-        env:
-          TEST: ${{ github.event_name == 'push' && github.env.TAG_CONDITION == 'true' }}
-        run: echo $TEST
+          TAG_CONDITION: ${{ !contains('#skip', toJson(github.event.commits.*.message)[0]) }}
+        run: echo $TAG_CONDITION
 
   # test:
   #   needs: simple_deployment_pipeline
