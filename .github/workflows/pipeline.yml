@@ -9,6 +9,9 @@ on:
     types: [opened, synchronize]
   workflow_dispatch:
 
+# env:
+#   TAG_CONDITION: ${{ }}
+
 jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
@@ -25,21 +28,35 @@ jobs:
         run: npm run build
       - name: test
         run: npm run test
-  test:
-    needs: simple_deployment_pipeline
-    uses: ./.github/workflows/playwright-test.yml
-  deploy:
-    if: ${{ github.event_name == 'push' }}
-    needs: test
-    uses: ./.github/workflows/render-deploy.yml
-    secrets: 
-      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-  tag_release:
-    needs: deploy
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.71.0
+      - name: github context
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: commits
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }}
+        run: echo "$COMMITS"
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
+
+  # test:
+  #   needs: simple_deployment_pipeline
+  #   uses: ./.github/workflows/playwright-test.yml
+  # deploy:
+  #   if: ${{ github.event_name == 'push' }}
+  #   needs: test
+  #   uses: ./.github/workflows/render-deploy.yml
+  #   secrets: 
+  #     RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+  # tag_release:
+  #   if: ${{ env.TAG_CONDITION == 'true' }}
+  #   needs: deploy
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Bump version and push tag
+  #       uses: anothrNick/github-tag-action@1.71.0
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
