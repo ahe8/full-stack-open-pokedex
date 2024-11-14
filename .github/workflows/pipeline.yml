@@ -50,6 +50,7 @@ jobs:
     needs: [simple_deployment_pipeline, test, deploy, tag_release]
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v4
       - name: Test Success
         uses: stegzilla/discord-notify@v2
         if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
