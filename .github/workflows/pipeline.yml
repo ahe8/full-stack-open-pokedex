@@ -47,12 +47,12 @@ jobs:
 
       - name: test
         env:
-          TEST_VAR: ${{ toJson(github.event.commits.*.message[0]) }}
+          TEST_VAR: ${{ github.event.commits[0].message }}
         run: echo "$TEST_VAR"
 
       - name: test1
         env:
-          TEST_VAR_ONE: ${{ toJson(github.event.commits.*.message)[0] }}
+          TEST_VAR_ONE: ${{ github.event.commits[1].message }}
         run: echo "$TEST_VAR_ONE"
 
       - name: test2
