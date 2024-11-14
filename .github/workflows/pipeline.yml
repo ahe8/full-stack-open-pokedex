@@ -46,12 +46,12 @@ jobs:
         run: echo "$COMMIT_MESSAGES"
       - name: test
         env:
-          TAG_CONDITION: ${{ toJson(github.event.commits.*.message)[0] }}
-        run: echo $TAG_CONDITION
+          TEST_VAR_ONE: ${{ toJson(github.event.commits.*.message)[0] }}
+        run: echo "$TEST_VAR_ONE"
       - name: test2
         env:
-          TAG_CONDITION: ${{ contains('#skip', toJson(github.event.commits.*.message)[0]) }}
-        run: echo $TAG_CONDITION
+          TEST_VAR_2: ${{ contains('#skip', toJson(github.event.commits.*.message)[0]) }}
+        run: echo "$TEST_VAR_2"
 
   # test:
   #   needs: simple_deployment_pipeline
