@@ -67,7 +67,7 @@ jobs:
 
       - name: test4
         env:
-          TEST_VAR_FOUR: ${{ contains('debug', github.event.commits[0].message) }}
+          TEST_VAR_FOUR: ${{ contains(github.event.commits[0].message, 'debug') }}
         run: echo "$TEST_VAR_FOUR"
 
   # test:
