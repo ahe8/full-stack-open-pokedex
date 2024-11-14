@@ -46,6 +46,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   send_discord_notification:
+    if: ${{ always() }}
+    needs: tag_release
     runs-on: ubuntu-20.04
     steps:
       - name: Test Success
