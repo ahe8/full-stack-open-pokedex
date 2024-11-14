@@ -57,18 +57,19 @@ jobs:
 
       - name: test2
         env:
-          TEST_VAR_TWO: ${{ contains('#skip', github.event.commits.*.message) }}
+          TEST_VAR_TWO: ${{ contains( github.event.commits.*.message, '#skip') }}
         run: echo "$TEST_VAR_TWO"
 
       - name: test3
         env:
-          TEST_VAR_THREE: ${{ contains('debug', github.event.commits.*.message) }}
+          TEST_VAR_THREE: ${{ contains(github.event.commits.*.message, 'debug') }}
         run: echo "$TEST_VAR_THREE"
 
       - name: test4
         env:
           TEST_VAR_FOUR: ${{ contains(github.event.commits[0].message, 'debug') }}
         run: echo "$TEST_VAR_FOUR"
+
 
   # test:
   #   needs: simple_deployment_pipeline
