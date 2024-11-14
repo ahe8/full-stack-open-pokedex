@@ -84,3 +84,10 @@ jobs:
             include_image: true
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub PR Notifier
+  health_check:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Check the deployed service URL
+      uses: jtalk/url-health-check-action@v4
+      with:
+        url: https://full-stack-open-pokedex-t6qy.onrender.com/health
