@@ -44,10 +44,10 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
-      # - name: test
-      #   env:
-      #     TEST_VAR_ONE: ${{ github.event.commits.*.message[0] }}
-      #   run: echo "$TEST_VAR_ONE"
+      - name: test
+        env:
+          TEST_VAR_ONE: ${{ toJson(github.event.commits.*.message)[0] }}
+        run: echo "$TEST_VAR_ONE"
 
       - name: test2
         env:
