@@ -19,73 +19,29 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      # - name: Install dependencies
-      #   run: npm install
-      # - name: Check style
-      #   run: npm run eslint
-      # - name: build
-      #   run: npm run build
-      # - name: test
-      #   run: npm run test
-      
-  test1:
+      - name: Install dependencies
+        run: npm install
+      - name: Check style
+        run: npm run eslint
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm run test
+  test:
+    needs: simple_deployment_pipeline
+    uses: ./.github/workflows/playwright-test.yml
+  deploy:
+    if: ${{ github.event_name == 'push' && !contains(github.event.commits.*.message, '#skip') }}
+    needs: test
+    uses: ./.github/workflows/render-deploy.yml
+    secrets:
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+  tag_release:
+    needs: deploy
     runs-on: ubuntu-20.04
     steps:
-
-      - name: github context
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.71.0
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: commits
-        env:
-          COMMITS: ${{ toJson(github.event.commits) }}
-        run: echo "$COMMITS"
-      - name: commit messages
-        env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-        run: echo "$COMMIT_MESSAGES"
-
-      - name: test
-        env:
-          TEST_VAR: ${{ github.event.commits[0].message }}
-        run: echo "$TEST_VAR"
-
-      - name: test1
-        env:
-          TEST_VAR_ONE: ${{ github.event.commits[1].message }}
-        run: echo "$TEST_VAR_ONE"
-
-      - name: test2
-        env:
-          TEST_VAR_TWO: ${{ contains( github.event.commits.*.message, '#skip') }}
-        run: echo "$TEST_VAR_TWO"
-
-      - name: test3
-        env:
-          TEST_VAR_THREE: ${{ contains(toJson(github.event.commits.*.message), 'debug') }}
-        run: echo "$TEST_VAR_THREE"
-
-      - name: test411
-        env:
-          TEST_VAR_FOUR: ${{ contains(github.event.commits[1].message, 'debug') }}
-        run: echo "$TEST_VAR_FOUR"
-
-
-  # test:
-  #   needs: simple_deployment_pipeline
-  #   uses: ./.github/workflows/playwright-test.yml
-  # deploy:
-  #   if: ${{ github.event_name == 'push' && github.env.TAG_CONDITION == 'true' }}
-  #   needs: test
-  #   uses: ./.github/workflows/render-deploy.yml
-  #   secrets:
-  #     RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-  # tag_release:
-  #   needs: deploy
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Bump version and push tag
-  #       uses: anothrNick/github-tag-action@1.71.0
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
