@@ -51,23 +51,35 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Test Success
-        uses: rjstone/discord-webhook-notify@v1
+        uses: stegzilla/discord-notify@v2
         if: success()
         with:
-            severity: info
-            details: Test Succeeded!
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+            title: Test Succeeded!
+            colour: '#008000'
+            message: "**${{ github.event.pull_request.title }}**\n**Creator:** ${{ github.event.pull_request.user.login }}\n${{ github.event.pull_request.html_url }}"
+            include_image: true
+            avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            username: GitHub PR Notifier
       - name: Test Failure
-        uses: rjstone/discord-webhook-notify@v1
+        uses: stegzilla/discord-notify@v2
         if: failure()
         with:
-            severity: error
-            details: Test Failed!
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+            title: Test Failed!
+            colour: '#FF0000'
+            message: "**${{ github.event.pull_request.title }}**\n**Creator:** ${{ github.event.pull_request.user.login }}\n${{ github.event.pull_request.html_url }}"
+            include_image: true
+            avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            username: GitHub PR Notifier
       - name: Test Cancelled
-        uses: rjstone/discord-webhook-notify@v1
+        uses: stegzilla/discord-notify@v2
         if: cancelled()
         with:
-            severity: warn
-            details: Test Cancelled!
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+            title: Test Cancelled!
+            colour: '#808080'
+            message: "**${{ github.event.pull_request.title }}**\n**Creator:** ${{ github.event.pull_request.user.login }}\n${{ github.event.pull_request.html_url }}"
+            include_image: true
+            avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            username: GitHub PR Notifier
