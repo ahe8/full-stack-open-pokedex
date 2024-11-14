@@ -47,17 +47,22 @@ jobs:
 
       - name: test
         env:
-          TEST_VAR_ONE: ${{ toJson(github.event.commits.*.message)[0] }}
+          TEST_VAR: ${{ fromJson(github.event.commits.*.message)[0] }}
+        run: echo "$TEST_VAR"
+
+      - name: test1
+        env:
+          TEST_VAR_ONE: ${{ fromJson(github.event.commits.*.message)[0] }}
         run: echo "$TEST_VAR_ONE"
 
       - name: test2
         env:
-          TEST_VAR_TWO: ${{ contains('#skip', toJson(github.event.commits.*.message)) }}
+          TEST_VAR_TWO: ${{ contains('#skip', fromJson(github.event.commits.*.message)) }}
         run: echo "$TEST_VAR_TWO"
 
       - name: test3
         env:
-          TEST_VAR_THREE: ${{ contains('debug', toJson(github.event.commits.*.message)) }}
+          TEST_VAR_THREE: ${{ contains('debug', fromJson(github.event.commits.*.message)) }}
         run: echo "$TEST_VAR_THREE"
 
   # test:
