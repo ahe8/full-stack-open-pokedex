@@ -47,12 +47,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   send_discord_notification:
     if: ${{ always() }}
-    needs: tag_release
+    needs: [simple_deployment_pipeline, test, deploy, tag_release]
     runs-on: ubuntu-20.04
     steps:
       - name: Test Success
         uses: stegzilla/discord-notify@v2
-        if: success()
+        if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
             title: Test Succeeded!
@@ -63,7 +63,7 @@ jobs:
             username: GitHub PR Notifier
       - name: Test Failure
         uses: stegzilla/discord-notify@v2
-        if: failure()
+        if: ${{ always() && contains(needs.*.result, 'failure') }}
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
             title: Test Failed!
@@ -74,7 +74,7 @@ jobs:
             username: GitHub PR Notifier
       - name: Test Cancelled
         uses: stegzilla/discord-notify@v2
-        if: cancelled()
+        if: ${{ always() && contains(needs.*.result, 'cancelled') }}
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
             title: Test Cancelled!
